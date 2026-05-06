@@ -1251,7 +1251,8 @@
                     "（2）取得本职业或相关职业五级/初级工职业资格（职业技能等级）证书后，累计从事本职业或相关职业工作满3年。",
                     "（3）取得本专业或相关专业的技工院校或中等及以上职业院校、专科及以上普通高等学校毕业证书（含在读应届毕业生）。"
                 ],
-                needsCert: [false, false, false],
+                needsCert: [false, true, false],
+                certType: ['', '职业技能等级证书', ''],
                 needsMajor: [false, false, true]
             },
             "3": {
@@ -1267,6 +1268,7 @@
                     "（6）取得经评估论证的高等职业学校、专科及以上普通高等学校本专业或相关专业的毕业证书（含在读应届毕业生）。"
                 ],
                 needsCert: [false, true, true, false, true, false],
+                certType: ['', '职业技能等级证书', '职称', '', '职业技能等级证书', ''],
                 needsMajor: [false, false, false, true, true, true]
             },
             "2": {
@@ -1281,6 +1283,7 @@
                     "（5）取得本职业或相关职业三级/高级工职业资格（职业技能等级）证书满2年的技师学院预备技师班、技师班学生。"
                 ],
                 needsCert: [true, true, true, true, true],
+                certType: ['职业技能等级证书', '职称', '职称', '职业技能等级证书', '职业技能等级证书'],
                 needsMajor: [false, false, false, false, false]
             },
             "1": {
@@ -1293,7 +1296,7 @@
                     "（3）取得符合专业对应关系的高级职称（专业技术人员职业资格）后，累计从事本职业或相关职业工作满1年。"
                 ],
                 needsCert: [true, true, true],
-                needsCertNumber: [false, false, false],
+                certType: ['职业技能等级证书', '职称', '职称'],
                 needsMajor: [false, false, false]
             }
         };
@@ -1562,20 +1565,21 @@
 
         function updateConditionAreas(data, condIdx) {
             const certArea = document.getElementById("certInfoArea");
+            const certNameLabel = document.querySelector('#certInfoArea .form-label');
             const certNumberField = document.getElementById("certNumber").parentElement.parentElement;
             const majorArea = document.getElementById("majorFieldArea");
             
             if (condIdx >= 0 && data.needsCert[condIdx]) {
                 certArea.classList.add("visible");
                 
-                if (data.needsCertNumber && data.needsCertNumber[condIdx] === false) {
-                    certNumberField.style.display = "none";
-                } else {
-                    certNumberField.style.display = "";
-                }
+                const certType = data.certType && data.certType[condIdx] ? data.certType[condIdx] : '证书/职称名称';
+                certNameLabel.textContent = certType + '名称';
+                
+                certNumberField.style.display = "none";
             } else {
                 certArea.classList.remove("visible");
-                certNumberField.style.display = "";
+                certNameLabel.textContent = "证书/职称名称";
+                certNumberField.style.display = "none";
             }
             
             if (condIdx >= 0 && data.needsMajor[condIdx]) {

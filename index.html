@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>人工智能训练师报名初审 | 麦包AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #bfdbfe;
+            --primary-bg: #eff6ff;
+            --primary-hover: #2563eb;
+            --secondary: #64748b;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08), 0 10px 10px -5px rgba(0,0,0,0.04);
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.25s ease;
+            --transition-slow: 0.35s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background: var(--gray-50);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-container { max-width: 850px; margin: 0 auto; padding: 0; }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            padding: 28px 20px 40px;
+            border-radius: 0 0 28px 28px;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 10px 16px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            text-decoration: none;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-normal);
+            border: 1px solid rgba(30,64,175,0.1);
+        }
+
+        .home-btn:hover {
+            background: #fff;
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-2px);
+        }
+
+        .home-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--primary);
+        }
+
+        .header::after {
+            content: ''; position: absolute;
+            top: -50%; right: -20%;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+
+        .header::before {
+            content: ''; position: absolute;
+            bottom: -30%; left: -10%;
+            width: 150px; height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            filter: blur(30px);
+        }
+
+        .admin-bar {
+            display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            margin: 0 12px 12px;
+            border-radius: var(--radius-sm);
+            flex-wrap: wrap;
+        }
+
+        .admin-bar label { font-size: 13px; color: rgba(255,255,255,0.9); font-weight: 500; }
+
+        .admin-bar input {
+            padding: 6px 12px; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px;
+            font-size: 13px; background: rgba(255,255,255,0.15); color: #fff;
+            outline: none; width: 110px; transition: all var(--transition-fast);
+        }
+
+        .admin-bar input::placeholder { color: rgba(255,255,255,0.5); }
+        .admin-bar input:focus { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.2); }
+
+        .admin-bar .btn-admin {
+            padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: 600;
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.15); color: #fff;
+            transition: all var(--transition-fast);
+        }
+
+        .admin-bar .btn-admin:hover { background: rgba(255,255,255,0.25); }
+        .admin-bar .btn-admin.active { background: var(--success); border-color: var(--success); }
+        .admin-bar .admin-status { font-size: 12px; color: rgba(255,255,255,0.7); min-width: 60px; }
+        .admin-bar .admin-status.logged-in { color: #86efac; }
+
+        .header-content { text-align: center; }
+
+        .header-logo { margin-bottom: 16px; }
+        .header-logo img {
+            max-height: 120px; max-width: 100%; object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .brand-name {
+            font-size: 20px; font-weight: 700; color: #fff;
+            letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 4px;
+        }
+
+        .tagline { font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 400; }
+
+        .card {
+            background: #fff; border-radius: var(--radius); box-shadow: var(--shadow-lg);
+            overflow: hidden; margin: -20px 12px 24px; position: relative; z-index: 10;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .stepper {
+            display: flex; align-items: center; justify-content: center;
+            padding: 22px 16px; background: linear-gradient(135deg, var(--gray-50) 0%, #fff 100%);
+            border-bottom: 1px solid var(--gray-100); gap: 0;
+        }
+
+        .step-item { display: flex; align-items: center; gap: 8px; transition: all var(--transition-fast); }
+
+        .step-circle {
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 600;
+            border: 2px solid var(--gray-300); color: var(--gray-400); background: #fff;
+            transition: all var(--transition-normal); flex-shrink: 0; box-shadow: var(--shadow-sm);
+        }
+
+        .step-item.active .step-circle {
+            border-color: var(--primary); background: var(--primary); color: #fff;
+            box-shadow: 0 4px 12px rgba(30,64,175,0.35); transform: scale(1.05);
+        }
+
+        .step-item.completed .step-circle { border-color: var(--success); background: var(--success); color: #fff; }
+
+        .step-label { font-size: 12px; color: var(--gray-400); font-weight: 500; white-space: nowrap; }
+        .step-item.active .step-label { color: var(--primary); font-weight: 600; }
+        .step-item.completed .step-label { color: var(--success); }
+
+        .step-connector {
+            width: 24px; height: 2px; background: var(--gray-200);
+            margin: 0 6px; flex-shrink: 0; transition: all var(--transition-normal);
+        }
+
+        .step-connector.completed { background: var(--success); }
+
+        .form-body { padding: 32px 24px; }
+
+        .step-panel { display: none; }
+        .step-panel.active { display: block; animation: fadeIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-title {
+            font-size: 19px; font-weight: 700; color: var(--gray-900);
+            margin-bottom: 8px; display: flex; align-items: center; gap: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        .section-title::before {
+            content: ''; width: 4px; height: 20px; background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%); border-radius: 2px;
+        }
+
+        .section-desc { font-size: 14px; color: var(--gray-500); margin-bottom: 28px; line-height: 1.6; }
+
+        .personal-form { display: grid; grid-template-columns: 1fr; gap: 0; }
+        .level-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+
+        .level-card {
+            border: 2px solid var(--gray-200); border-radius: var(--radius);
+            padding: 20px; cursor: pointer; transition: all var(--transition-normal);
+            position: relative; background: #fff;
+            overflow: hidden;
+        }
+
+        .level-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--primary); transform: scaleY(0);
+            transition: transform var(--transition-normal);
+            transform-origin: top;
+        }
+
+        .level-card:hover::before,
+        .level-card.selected::before {
+            transform: scaleY(1);
+        }
+
+        .level-card:hover {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary-bg) 0%, #fff 100%);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .level-card.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary-bg) 0%, #fff 100%);
+            box-shadow: 0 6px 20px rgba(30,64,175,0.18);
+        }
+
+        .level-card.selected::after {
+            content: ''; position: absolute; top: 12px; right: 12px;
+            width: 26px; height: 26px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+            background-size: 15px; background-repeat: no-repeat; background-position: center;
+            animation: popIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 3px 8px rgba(30,64,175,0.4);
+        }
+
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
+
+        .level-card .level-name {
+            font-size: 16px; font-weight: 700; color: var(--gray-800);
+            transition: all var(--transition-fast);
+            letter-spacing: 0.3px;
+        }
+
+        .level-card .level-sub {
+            font-size: 13px; color: var(--gray-500); margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        .level-card:hover .level-name,
+        .level-card.selected .level-name {
+            color: var(--primary-dark);
+        }
+
+        .qual-box {
+            background: var(--primary-bg); border: 1px solid var(--primary-light);
+            border-radius: var(--radius-sm); padding: 20px; margin-bottom: 24px;
+        }
+
+        .qual-box-title {
+            font-size: 15px; font-weight: 600; color: var(--primary-dark);
+            margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+        }
+
+        .qual-box-title svg { width: 20px; height: 20px; fill: var(--primary); }
+
+        .qual-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px dashed var(--gray-200);
+            animation: fadeIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .review-qual-box {
+            background: var(--primary-bg);
+            border: 1px solid var(--primary-light);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+        }
+
+        .review-qual-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+        }
+
+        .review-qual-header svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--primary);
+        }
+
+        #reviewQualContent {
+            font-size: 14px;
+            color: var(--gray-700);
+            line-height: 1.7;
+            padding: 12px;
+            background: #fff;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .qual-list { list-style: none; padding: 0; }
+        .qual-list li {
+            font-size: 14px; color: var(--gray-700); padding: 8px 0;
+            border-bottom: 1px dashed var(--gray-200); line-height: 1.7;
+        }
+
+        .qual-list li:last-child { border-bottom: none; }
+
+        .qual-radio-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+
+        .qual-radio-item {
+            border: 2px solid var(--gray-200); border-radius: var(--radius);
+            padding: 18px; cursor: pointer; transition: all var(--transition-normal);
+            position: relative; background: #fff;
+            overflow: hidden;
+        }
+
+        .qual-radio-item::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--primary); transform: scaleY(0);
+            transition: transform var(--transition-normal);
+            transform-origin: top;
+        }
+
+        .qual-radio-item:hover::before,
+        .qual-radio-item.selected::before {
+            transform: scaleY(1);
+        }
+
+        .qual-radio-item:hover {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary-bg) 0%, #fff 100%);
+            transform: translateX(4px);
+        }
+
+        .qual-radio-item.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary-bg) 0%, #fff 100%);
+            box-shadow: 0 4px 14px rgba(30,64,175,0.12);
+        }
+
+        .qual-radio-item input[type="radio"] { display: none; }
+
+        .qual-radio-label { display: flex; align-items: flex-start; gap: 14px; cursor: pointer; }
+
+        .radio-dot {
+            width: 22px; height: 22px; border: 2px solid var(--gray-300);
+            border-radius: 50%; flex-shrink: 0; margin-bottom: 8px;
+            transition: all var(--transition-normal);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+
+        .radio-dot::after {
+            content: ''; width: 8px; height: 8px; background: #fff;
+            border-radius: 50%; opacity: 0;
+            transition: all var(--transition-fast);
+            transform: scale(0);
+        }
+
+        .qual-radio-item.selected .radio-dot {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            box-shadow: 0 0 0 3px rgba(30,64,175,0.15);
+        }
+
+        .qual-radio-item.selected .radio-dot::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .radio-text { font-size: 14px; color: var(--gray-700); line-height: 1.65; }
+
+        .cert-info-area {
+            display: none; margin-top: 16px; padding: 20px;
+            background: var(--gray-50); border-radius: var(--radius-sm); border: 1px solid var(--gray-200);
+        }
+
+        .cert-info-area.visible { display: block; }
+
+        .major-field-area {
+            display: none; margin-top: 16px; padding: 20px;
+            background: var(--primary-bg); border-radius: var(--radius-sm); border: 1px solid var(--primary-light);
+        }
+
+        .major-field-area.visible { display: block; }
+
+        .major-hint {
+            font-size: 12px; color: var(--primary-dark); margin-top: 8px;
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        .major-hint svg { width: 14px; height: 14px; fill: var(--primary); }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-label {
+            display: block; font-size: 14px; font-weight: 600;
+            color: var(--gray-700); margin-bottom: 6px;
+        }
+
+        .form-label .required { color: var(--danger); margin-left: 2px; }
+
+        .form-input {
+            width: 100%; padding: 13px 16px; border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-sm); font-size: 14px; color: var(--gray-800);
+            transition: all var(--transition-normal); outline: none; background: #fff;
+            -webkit-appearance: none;
+            font-family: inherit;
+            letter-spacing: 0.2px;
+            position: relative;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30,64,175,0.12), 0 4px 12px rgba(30,64,175,0.08);
+            background: linear-gradient(135deg, #fff 0%, var(--primary-bg) 100%);
+        }
+
+        .form-input:hover {
+            border-color: var(--gray-300);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .form-input.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(220,38,38,0.12), 0 4px 12px rgba(220,38,38,0.08);
+        }
+
+        .form-input::placeholder {
+            color: var(--gray-400);
+            font-weight: 400;
+        }
+
+        .error-msg { font-size: 12px; color: var(--danger); margin-top: 4px; display: none; }
+        .error-msg.visible { display: block; }
+
+        .info-banner {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 14px 16px; background: var(--warning-light);
+            border: 1px solid #fcd34d; border-radius: var(--radius-sm);
+            margin-bottom: 20px;
+        }
+
+        .info-banner svg { width: 18px; height: 18px; fill: var(--warning); flex-shrink: 0; margin-top: 1px; }
+        .info-banner p { font-size: 13px; color: var(--gray-700); line-height: 1.6; }
+
+        .review-section { margin-bottom: 24px; }
+
+        .review-section-title {
+            font-size: 15px; font-weight: 600; color: var(--gray-800);
+            padding-bottom: 10px; border-bottom: 2px solid var(--primary);
+            margin-bottom: 14px;
+        }
+
+        .review-row { display: flex; padding: 8px 0; font-size: 14px; border-bottom: 1px solid var(--gray-100); }
+        .review-row:last-child { border-bottom: none; }
+
+        .review-label { color: var(--gray-500); width: 100px; flex-shrink: 0; font-weight: 500; }
+        .review-value { color: var(--gray-800); flex: 1; word-break: break-all; }
+
+        .form-actions {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 24px; border-top: 1px solid var(--gray-100);
+            background: var(--gray-50);
+        }
+
+        .btn {
+            padding: 12px 28px; border-radius: var(--radius-sm); font-size: 14px;
+            font-weight: 600; cursor: pointer; border: none; transition: all var(--transition-normal);
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            white-space: nowrap; position: relative; overflow: hidden;
+            letter-spacing: 0.3px;
+        }
+
+        .btn::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before { left: 100%; }
+
+        .btn:active { transform: scale(0.98); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(30,64,175,0.35);
+            border: 1px solid rgba(30,64,175,0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%);
+            box-shadow: 0 6px 20px rgba(30,64,175,0.45);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #fff; color: var(--gray-600);
+            border: 1.5px solid var(--gray-300);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #047857 100%);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(5,150,105,0.35);
+            border: 1px solid rgba(5,150,105,0.3);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669 0%, var(--success) 100%);
+            box-shadow: 0 6px 20px rgba(5,150,105,0.45);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: #fff; color: var(--primary);
+            border: 1.5px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(30,64,175,0.1);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-bg);
+            box-shadow: 0 4px 14px rgba(30,64,175,0.15);
+            transform: translateY(-1px);
+        }
+
+        .auto-save-hint { font-size: 12px; color: var(--gray-400); display: flex; align-items: center; gap: 4px; transition: opacity 0.3s; }
+        .auto-save-hint svg { width: 13px; height: 13px; fill: var(--success); }
+
+        .success-page { text-align: center; padding: 48px 24px; }
+
+        .success-icon {
+            width: 88px; height: 88px; background: var(--success-light); border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            margin-bottom: 20px; animation: successPop 0.5s ease;
+            box-shadow: 0 8px 24px rgba(5,150,105,0.25);
+        }
+
+        @keyframes successPop { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+
+        .success-icon svg { width: 44px; height: 44px; fill: var(--success); }
+
+        .success-title { font-size: 24px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; }
+        .success-desc { font-size: 14px; color: var(--gray-500); margin-bottom: 28px; line-height: 1.7; }
+        .success-desc strong { color: var(--primary); }
+
+        .success-actions {
+            display: flex; gap: 12px; justify-content: center;
+            margin-bottom: 20px; flex-wrap: wrap;
+        }
+
+        .success-actions .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+
+        .success-tip {
+            font-size: 13px; color: var(--gray-500);
+            display: flex; align-items: center; justify-content: center;
+            gap: 6px;
+            padding: 12px 16px;
+            background: var(--gray-50);
+            border-radius: var(--radius-sm);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .success-tip svg {
+            width: 14px; height: 14px;
+            fill: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .success-info-box {
+            background: var(--gray-50); border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm); padding: 20px; text-align: left;
+            max-width: 400px; margin: 0 auto 28px;
+        }
+
+        .success-info-row {
+            display: flex; justify-content: space-between; padding: 8px 0;
+            font-size: 14px; border-bottom: 1px solid var(--gray-100);
+        }
+
+        .success-info-row:last-child { border-bottom: none; }
+        .success-info-row .label { color: var(--gray-500); font-weight: 500; }
+        .success-info-row .value { color: var(--gray-800); font-weight: 600; }
+
+        .toast {
+            position: fixed; top: 20px; left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            padding: 12px 24px; border-radius: var(--radius-sm);
+            font-size: 14px; font-weight: 500; z-index: 1000;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-xl); max-width: 90vw; text-align: center;
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast-success { background: var(--success); color: #fff; }
+        .toast-error { background: var(--danger); color: #fff; }
+        .toast-warning { background: var(--warning); color: #fff; }
+
+        .export-bar {
+            display: none; justify-content: flex-end; padding: 14px 24px;
+            background: var(--gray-50); border-top: 1px solid var(--gray-100);
+        }
+
+        .export-bar.visible { display: flex; }
+
+        .footer {
+            background: linear-gradient(145deg, var(--gray-900) 0%, var(--gray-800) 100%);
+            padding: 32px 24px; margin-top: 32px;
+            border-radius: var(--radius); color: #fff;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 100;
+        }
+
+        .footer::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 3px; background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 50%, var(--primary) 100%);
+        }
+
+        .footer-content { display: flex; flex-direction: column; gap: 24px; }
+
+        .footer-brand {
+            display: flex; align-items: center; gap: 16px;
+            padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: transform var(--transition-normal);
+        }
+
+        .footer-brand:hover { transform: translateX(4px); }
+
+        .footer-brand-icon {
+            width: 56px; height: 56px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            transition: all var(--transition-normal);
+            flex-shrink: 0;
+        }
+
+        .footer-brand:hover .footer-brand-icon {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .footer-brand-icon img {
+            width: 100%; height: 100%;
+            object-fit: contain;
+        }
+
+        .footer-brand-text { display: flex; flex-direction: column; }
+
+        .footer-brand-name-row {
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+
+        .footer-brand-name {
+            font-size: 17px; font-weight: 700; color: #fff;
+            letter-spacing: 0.5px; line-height: 1.3;
+            transition: color var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        .footer-brand:hover .footer-brand-name { color: var(--primary-light); }
+
+        .footer-brand-tagline {
+            font-size: 13px; color: rgba(255,255,255,0.6);
+            margin-top: 4px;
+        }
+
+        .contact-info { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px;
+            overflow: visible;
+        }
+
+        .contact-row {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: var(--radius-sm);
+            border: 1px solid transparent;
+            transition: all var(--transition-normal);
+            cursor: pointer;
+        }
+
+        .contact-row:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(30,64,175,0.3);
+            transform: translateX(4px);
+        }
+
+        .contact-row-icon {
+            width: 36px; height: 36px;
+            background: rgba(30,64,175,0.15);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: background var(--transition-fast);
+        }
+
+        .contact-row:hover .contact-row-icon {
+            background: rgba(30,64,175,0.25);
+        }
+
+        .contact-row-icon svg { width: 18px; height: 18px; fill: var(--primary-light); }
+
+        .contact-row-content { display: flex; flex-direction: column; flex: 1; }
+
+        .contact-row-label {
+            color: rgba(255,255,255,0.5); font-size: 11px;
+            margin-bottom: 2px; font-weight: 500;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .contact-row-value {
+            font-size: 14px; color: rgba(255,255,255,0.95);
+            font-weight: 500;
+        }
+
+        .contact-row-value a {
+            color: var(--primary-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all var(--transition-fast);
+        }
+
+        .contact-row-value a:hover { color: #fff; }
+
+        .contact-row-action {
+            width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(30,64,175,0.2);
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+        }
+
+        .contact-row:hover .contact-row-action {
+            background: rgba(30,64,175,0.35);
+        }
+
+        .contact-row-action svg {
+            width: 14px; height: 14px;
+            fill: var(--primary-light);
+        }
+
+        .contact-row-phone .contact-row-value {
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .wechat-note {
+            font-size: 11px; color: rgba(255,255,255,0.5);
+            margin-left: 4px;
+        }
+
+        .wechat-row, .map-row {
+            position: relative;
+            z-index: 200;
+        }
+
+        .wechat-row:hover .wechat-qr-popup,
+        .wechat-qr-popup:hover {
+            display: block;
+        }
+
+        .wechat-qr-popup {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 9999;
+            margin-bottom: 8px;
+        }
+
+        .wechat-qr-popup::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #fff;
+        }
+
+        .wechat-qr-popup img {
+            width: 160px; height: 160px;
+            display: block;
+        }
+
+        .wechat-qr-popup .qr-hint {
+            font-size: 12px; color: var(--gray-600);
+            text-align: center; margin-top: 8px;
+        }
+
+        .map-row:hover .map-popup,
+        .map-popup:hover {
+            display: block;
+        }
+
+        .map-popup {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 8px 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 9999;
+            margin-bottom: 8px;
+            min-width: 160px;
+        }
+
+        .map-popup::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 20px;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #fff;
+        }
+
+        .map-option {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 16px;
+            color: var(--gray-700);
+            font-size: 14px;
+            cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+
+        .map-option:hover { background: var(--gray-50); }
+
+        .map-option svg {
+            width: 20px; height: 20px;
+            fill: var(--gray-600);
+        }
+
+        .footer-bottom {
+            margin-top: 20px; padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            text-align: center; font-size: 12px; color: rgba(255,255,255,0.4);
+        }
+
+        @media (min-width: 480px) {
+            .page-container { padding: 16px; }
+            .header { padding: 36px 28px 48px; }
+            .brand-name { font-size: 23px; }
+            .tagline { font-size: 14px; }
+            .stepper { padding: 24px 20px; }
+            .step-circle { width: 34px; height: 34px; font-size: 14px; }
+            .step-connector { width: 30px; }
+            .step-label { font-size: 13px; }
+            .form-body { padding: 36px 28px; }
+            .form-actions { padding: 20px 28px; }
+            .footer { padding: 32px; }
+            .level-grid { gap: 14px; }
+        }
+
+        @media (min-width: 560px) {
+            .level-grid { grid-template-columns: 1fr 1fr; }
+            .personal-form { grid-template-columns: 1fr 1fr; gap: 0 20px; }
+            .review-label { width: 120px; }
+            .contact-info { flex-direction: row; flex-wrap: wrap; justify-content: space-between; }
+            .contact-item { width: calc(50% - 10px); }
+        }
+
+        @media (min-width: 768px) {
+            .page-container { padding: 24px; }
+            .header { padding: 44px 36px 56px; }
+            .header-logo img { max-height: 150px; }
+            .brand-name { font-size: 28px; }
+            .tagline { font-size: 15px; }
+            .admin-bar { gap: 14px; padding: 14px 26px; }
+            .admin-bar input { width: 130px; }
+            .card { margin: -28px 16px 28px; }
+            .stepper { padding: 28px 26px; }
+            .step-circle { width: 38px; height: 38px; font-size: 15px; }
+            .step-label { font-size: 13px; }
+            .step-connector { width: 40px; margin: 0 10px; }
+            .form-body { padding: 40px 36px; }
+            .section-title { font-size: 21px; }
+            .section-desc { font-size: 15px; }
+            .form-actions { padding: 24px 36px; }
+            .btn { padding: 13px 32px; font-size: 15px; }
+            .success-page { padding: 64px 36px; }
+            .success-title { font-size: 28px; }
+            .success-desc { font-size: 15px; }
+            .success-info-box { padding: 28px; }
+            .footer { padding: 36px; }
+            .footer-content { flex-direction: row; justify-content: space-between; align-items: flex-start; }
+            .footer-brand { border-bottom: none; padding-bottom: 0; }
+            .contact-info { justify-content: flex-end; gap: 32px; }
+            .contact-item { width: auto; }
+            .level-grid { gap: 16px; }
+        }
+
+        @media (min-width: 1024px) {
+            .page-container { padding: 32px; }
+            .header { padding: 48px 40px 56px; }
+            .brand-name { font-size: 28px; }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/" class="home-btn" id="homeBtn">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        回到首页
+    </a>
+    <div class="page-container">
+        <div class="header">
+            <div class="admin-bar" id="adminBar">
+                <label>管理员</label>
+                <input type="text" id="adminUser" placeholder="用户名" autocomplete="off">
+                <input type="password" id="adminPass" placeholder="密码" autocomplete="off">
+                <button type="button" class="btn-admin" id="adminLoginBtn" onclick="toggleAdmin()">登录</button>
+                <span class="admin-status" id="adminStatus"></span>
+            </div>
+
+            <div class="header-content">
+                <div class="header-logo">
+                    <img src="logo.png" alt="麦包AI">
+                </div>
+                <div class="brand-name">人工智能训练师报名初审</div>
+                <div class="tagline">专注职业技能等级认定服务</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="stepper" id="stepper">
+                <div class="step-item active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <span class="step-label">个人信息</span>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-item" data-step="2">
+                    <div class="step-circle">2</div>
+                    <span class="step-label">报考条件</span>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-item" data-step="3">
+                    <div class="step-circle">3</div>
+                    <span class="step-label">确认提交</span>
+                </div>
+            </div>
+
+            <form id="registrationForm" novalidate>
+                <div class="form-body">
+                    <div class="step-panel active" id="step1">
+                        <h2 class="section-title">填写个人信息</h2>
+                        <p class="section-desc">请填写您的基本信息，带 <span style="color:var(--danger)">*</span> 为必填项</p>
+                        <div class="personal-form">
+                            <div class="form-group">
+                                <label class="form-label">姓名 <span class="required">*</span></label>
+                                <input type="text" class="form-input" id="userName" placeholder="请输入真实姓名">
+                                <div class="error-msg" id="userNameError">请输入姓名</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">工作单位</label>
+                                <input type="text" class="form-input" id="company" placeholder="请输入工作单位名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-panel" id="step2">
+                        <h2 class="section-title">选择报考等级</h2>
+                        <p class="section-desc">请选择您要报考的人工智能训练师职业技能等级</p>
+                        <div class="info-banner">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            <p>请根据您的实际资历条件选择对应的报考等级。不同等级对应不同的资格要求，请仔细阅读后再做选择。</p>
+                        </div>
+                        <div class="level-grid" id="levelGrid">
+                            <div class="level-card" data-level="4">
+                                <div class="level-name">四级 / 中级工</div>
+                                <div class="level-sub">需满足工作年限或学历要求</div>
+                            </div>
+                            <div class="level-card" data-level="3">
+                                <div class="level-name">三级 / 高级工</div>
+                                <div class="level-sub">需满足较长工作年限或持证要求</div>
+                            </div>
+                            <div class="level-card" data-level="2">
+                                <div class="level-name">二级 / 技师</div>
+                                <div class="level-sub">需持高级工证书及工作年限</div>
+                            </div>
+                            <div class="level-card" data-level="1" style="grid-column: 1 / -1;">
+                                <div class="level-name">一级 / 高级技师</div>
+                                <div class="level-sub">最高级别，需持技师证书或中级及以上职称</div>
+                            </div>
+                        </div>
+
+                        <div class="qual-section" id="qualSection" style="display:none;">
+                            <div class="qual-box" id="qualBox">
+                                <div class="qual-box-title">
+                                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                    <span id="qualBoxTitleText">报考资格要求</span>
+                                </div>
+                                <ul class="qual-list" id="qualList"></ul>
+                            </div>
+
+                            <h3 style="font-size:15px;font-weight:600;color:var(--gray-800);margin-bottom:12px;">请选择您符合的条件</h3>
+                            <div class="qual-radio-group" id="qualRadioGroup"></div>
+
+                            <div class="cert-info-area" id="certInfoArea">
+                                <div class="form-group">
+                                    <label class="form-label">证书/职称名称</label>
+                                    <input type="text" class="form-input" id="certName" placeholder="请输入证书或职称名称">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="form-label">证书/职称编号</label>
+                                    <input type="text" class="form-input" id="certNumber" placeholder="请输入证书或职称编号（如有）">
+                                </div>
+                            </div>
+
+                            <div class="major-field-area" id="majorFieldArea">
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="form-label">专业或相关专业名称</label>
+                                    <input type="text" class="form-input" id="majorName" placeholder="请输入您的专业或相关专业名称">
+                                    <div class="major-hint">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                                        请填写与毕业证完全一致的专业名称
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-panel" id="step3">
+                        <h2 class="section-title">确认报名信息</h2>
+                        <p class="section-desc">请仔细核对以下信息，确认无误后提交</p>
+
+                        <div class="review-section">
+                            <div class="review-section-title">个人信息</div>
+                            <div class="review-row">
+                                <span class="review-label">姓名</span>
+                                <span class="review-value" id="reviewName">-</span>
+                            </div>
+                            <div class="review-row">
+                                <span class="review-label">工作单位</span>
+                                <span class="review-value" id="reviewCompany">-</span>
+                            </div>
+                        </div>
+
+                        <div class="review-section">
+                            <div class="review-section-title">报考信息</div>
+                            <div class="review-row">
+                                <span class="review-label">报考等级</span>
+                                <span class="review-value" id="reviewLevel">-</span>
+                            </div>
+                            <div class="review-row">
+                                <span class="review-label">符合条件</span>
+                                <span class="review-value" id="reviewQual">-</span>
+                            </div>
+                            <div class="review-row" id="reviewCertRow">
+                                <span class="review-label">证书/职称</span>
+                                <span class="review-value" id="reviewCert">-</span>
+                            </div>
+                            <div class="review-row" id="reviewMajorRow">
+                                <span class="review-label">专业名称</span>
+                                <span class="review-value" id="reviewMajor">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-panel" id="step4">
+                        <div class="success-page">
+                            <div class="success-icon">
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            </div>
+                            <h2 class="success-title">报名信息提交成功！</h2>
+                            <p class="success-desc">感谢您的报名！工作人员将在 <strong>2-3 个工作日</strong> 内完成资格审核。</p>
+                            <div class="success-info-box">
+                                <div class="success-info-row">
+                                    <span class="label">报考等级</span>
+                                    <span class="value" id="successLevel">-</span>
+                                </div>
+                                <div class="success-info-row">
+                                    <span class="label">提交时间</span>
+                                    <span class="value" id="successTime">-</span>
+                                </div>
+                                <div class="success-info-row">
+                                    <span class="label">审核状态</span>
+                                    <span class="value" style="color:var(--warning)">待审核</span>
+                                </div>
+                            </div>
+                            <div class="success-actions">
+                                <button type="button" class="btn btn-primary" onclick="resetForm()">
+                                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                                    返回首页
+                                </button>
+                            </div>
+                            <p class="success-tip">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                                审核结果将通过短信或微信通知您，请保持联系方式畅通
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions" id="formActions">
+                    <button type="button" class="btn btn-secondary" id="prevBtn" onclick="prevStep()" style="visibility:hidden">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                        上一步
+                    </button>
+                    <div class="auto-save-hint" id="autoSaveHint">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        已自动保存
+                    </div>
+                    <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+                        下一步
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                    </button>
+                </div>
+
+                <div class="export-bar" id="exportBar">
+                    <button type="button" class="btn btn-outline" onclick="exportExcel()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        导出报名数据
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-brand-icon">
+                        <img src="logo.png" alt="麦包AI">
+                    </div>
+                    <div class="footer-brand-text">
+                        <div class="footer-brand-name">广州嘉智麦联信息科技有限公司</div>
+                        <div class="footer-brand-tagline">麦包AI · 专注AI人才培养</div>
+                    </div>
+                </div>
+
+                <div class="contact-info">
+                    <div class="contact-row wechat-row" id="wechatRow" onclick="handleWechatClick(event)">
+                        <div class="contact-row-icon">
+                            <svg viewBox="0 0 24 24" fill="var(--primary-light)"><path d="M8.5 7C10.433 7 12 8.567 12 10.5C12 12.433 10.433 14 8.5 14C6.567 14 5 12.433 5 10.5C5 8.567 6.567 7 8.5 7Z"/><path d="M15.5 7C17.433 7 19 8.567 19 10.5C19 12.433 17.433 14 15.5 14C13.567 14 12 12.433 12 10.5C12 8.567 13.567 7 15.5 7Z"/><path d="M8.5 15.5C6.788 15.5 5.3 16.4 4.5 17.75C3.9 18.6 3.5 19.6 3.5 20.75C3.5 21.9 4.3 23 5.75 23H7.25C8.5 23 9.5 22.5 10.25 21.75C11 21 11.5 20 11.5 18.75C11.5 17 10.25 15.5 8.5 15.5Z"/><path d="M15.5 15.5C13.788 15.5 12.3 16.4 11.5 17.75C10.9 18.6 10.5 19.6 10.5 20.75C10.5 21.9 11.3 23 12.75 23H14.25C15.5 23 16.5 22.5 17.25 21.75C18 21 18.5 20 18.5 18.75C18.5 17 17.25 15.5 15.5 15.5Z"/></svg>
+                        </div>
+                        <div class="contact-row-content">
+                            <div class="contact-row-label">联系电话</div>
+                            <div class="contact-row-value">
+                                <span>17819620244</span>
+                                <span class="wechat-note">（微信同号）</span>
+                            </div>
+                        </div>
+                        <div class="wechat-qr-popup" id="wechatQrPopup">
+                            <img src="wechat-qr.jpg" alt="微信二维码">
+                            <div class="qr-hint">用微信扫码添加好友</div>
+                        </div>
+                    </div>
+                    <div class="contact-row map-row" id="mapRow">
+                        <div class="contact-row-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </div>
+                        <div class="contact-row-content">
+                            <div class="contact-row-label">机构地址</div>
+                            <div class="contact-row-value">增城敏捷广场三楼328、329号麦包AI</div>
+                        </div>
+                        <div class="map-popup" id="mapPopup">
+                            <div class="map-option" onclick="event.stopPropagation(); copyAddress()">
+                                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                                复制地址
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2026 广州嘉智麦联信息科技有限公司 版权所有
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const ADMIN_CREDENTIALS = { username: "admin", password: "admin123" };
+
+        const LEVEL_DATA = {
+            "4": {
+                name: "四级/中级工",
+                fullName: "人工智能训练师四级（中级工）",
+                conditions: [
+                    "具备以下条件之一者，可申报四级/中级工：",
+                    "（1）累计从事本职业或相关职业工作满5年。",
+                    "（2）取得本职业或相关职业五级/初级工职业资格（职业技能等级）证书后，累计从事本职业或相关职业工作满3年。",
+                    "（3）取得本专业或相关专业的技工院校或中等及以上职业院校、专科及以上普通高等学校毕业证书（含在读应届毕业生）。"
+                ],
+                needsCert: [false, false, false],
+                needsMajor: [false, false, true]
+            },
+            "3": {
+                name: "三级/高级工",
+                fullName: "人工智能训练师三级（高级工）",
+                conditions: [
+                    "具备以下条件之一者，可申报三级/高级工：",
+                    "（1）累计从事本职业或相关职业工作满10年。",
+                    "（2）取得本职业或相关职业四级/中级工职业资格（职业技能等级）证书后，累计从事本职业或相关职业工作满4年。",
+                    "（3）取得符合专业对应关系的初级职称（专业技术人员职业资格）后，累计从事本职业或相关职业工作满1年。",
+                    "（4）取得本专业或相关专业的技工院校高级工班及以上毕业证书（含在读应届毕业生）。",
+                    "（5）取得本职业或相关职业四级/中级工职业资格（职业技能等级）证书，并取得高等职业学校、专科及以上普通高等学校本专业或相关专业毕业证书（含在读应届毕业生）。",
+                    "（6）取得经评估论证的高等职业学校、专科及以上普通高等学校本专业或相关专业的毕业证书（含在读应届毕业生）。"
+                ],
+                needsCert: [false, true, true, false, true, false],
+                needsMajor: [false, false, false, true, true, true]
+            },
+            "2": {
+                name: "二级/技师",
+                fullName: "人工智能训练师二级（技师）",
+                conditions: [
+                    "具备以下条件之一者，可申报二级/技师：",
+                    "（1）取得本职业或相关职业三级/高级工职业资格（职业技能等级）证书后，累计从事本职业或相关职业工作满5年。",
+                    "（2）取得符合专业对应关系的初级职称（专业技术人员职业资格）后，累计从事本职业或相关职业工作满5年并在取得本职业或相关职业三级/高级工职业资格（职业技能等级）证书后，从事本职业或相关职业工作满1年。",
+                    "（3）取得符合专业对应关系的中级职称（专业技术人员职业资格）后，累计从事本职业或相关职业工作满1年。",
+                    "（4）取得本职业或相关职业三级/高级工职业资格（职业技能等级）证书的高级技工学校、技师学院毕业生，累计从事本职业或相关职业工作满2年。",
+                    "（5）取得本职业或相关职业三级/高级工职业资格（职业技能等级）证书满2年的技师学院预备技师班、技师班学生。"
+                ],
+                needsCert: [true, true, true, true, true],
+                needsMajor: [false, false, false, false, false]
+            },
+            "1": {
+                name: "一级/高级技师",
+                fullName: "人工智能训练师一级（高级技师）",
+                conditions: [
+                    "具备以下条件之一者，可申报一级/高级技师：",
+                    "（1）取得本职业或相关职业二级/技师职业资格（职业技能等级）证书后，累计从事本职业或相关职业工作满5年。",
+                    "（2）取得符合专业对应关系的中级职称后，累计从事本职业或相关职业工作满5年，并在取得本职业或相关职业二级/技师职业资格（职业技能等级）证书后，从事本职业或相关职业工作满1年。",
+                    "（3）取得符合专业对应关系的高级职称（专业技术人员职业资格）后，累计从事本职业或相关职业工作满1年。"
+                ],
+                needsCert: [true, true, true],
+                needsMajor: [false, false, false]
+            }
+        };
+
+        let currentStep = 1;
+        let selectedLevel = null;
+        let selectedCondition = -1;
+        let isAdminLoggedIn = false;
+        let submissions = [];
+
+        function init() {
+            loadSavedData();
+            setupLevelCards();
+            setupFormValidation();
+            checkAdminSession();
+            updateStepper();
+            showStep(1);
+        }
+
+        function checkAdminSession() {
+            try {
+                const session = localStorage.getItem("ai_trainer_admin");
+                if (session === "true") {
+                    isAdminLoggedIn = true;
+                    updateAdminUI();
+                }
+            } catch (e) {}
+        }
+
+        function toggleAdmin() {
+            if (isAdminLoggedIn) {
+                isAdminLoggedIn = false;
+                localStorage.removeItem("ai_trainer_admin");
+                updateAdminUI();
+                showToast("已退出管理员", "success");
+                return;
+            }
+            const user = document.getElementById("adminUser").value.trim();
+            const pass = document.getElementById("adminPass").value.trim();
+            if (user === ADMIN_CREDENTIALS.username && pass === ADMIN_CREDENTIALS.password) {
+                isAdminLoggedIn = true;
+                localStorage.setItem("ai_trainer_admin", "true");
+                updateAdminUI();
+                showToast("管理员登录成功", "success");
+                document.getElementById("adminUser").value = "";
+                document.getElementById("adminPass").value = "";
+            } else {
+                showToast("用户名或密码错误", "error");
+            }
+        }
+
+        function updateAdminUI() {
+            const loginBtn = document.getElementById("adminLoginBtn");
+            const statusEl = document.getElementById("adminStatus");
+            const exportBar = document.getElementById("exportBar");
+            const userInput = document.getElementById("adminUser");
+            const passInput = document.getElementById("adminPass");
+
+            if (isAdminLoggedIn) {
+                loginBtn.textContent = "退出";
+                loginBtn.classList.add("active");
+                statusEl.textContent = "● 已登录";
+                statusEl.classList.add("logged-in");
+                exportBar.classList.add("visible");
+                userInput.style.display = "none";
+                passInput.style.display = "none";
+            } else {
+                loginBtn.textContent = "登录";
+                loginBtn.classList.remove("active");
+                statusEl.textContent = "";
+                statusEl.classList.remove("logged-in");
+                exportBar.classList.remove("visible");
+                userInput.style.display = "";
+                passInput.style.display = "";
+            }
+        }
+
+        function loadSavedData() {
+            try {
+                const saved = localStorage.getItem("ai_trainer_form_v2");
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data.userName) document.getElementById("userName").value = data.userName;
+                    if (data.company) document.getElementById("company").value = data.company;
+                    if (data.selectedLevel) {
+                        selectedLevel = data.selectedLevel;
+                        document.querySelectorAll(".level-card").forEach(card => {
+                            if (card.dataset.level === selectedLevel) {
+                                card.classList.add("selected");
+                            }
+                        });
+                    }
+                    if (data.selectedCondition !== undefined) selectedCondition = data.selectedCondition;
+                    if (data.submissions) submissions = data.submissions;
+                }
+            } catch (e) {}
+        }
+
+        function saveData() {
+            try {
+                const data = {
+                    userName: document.getElementById("userName").value,
+                    company: document.getElementById("company").value,
+                    selectedLevel: selectedLevel,
+                    selectedCondition: selectedCondition,
+                    submissions: submissions
+                };
+                localStorage.setItem("ai_trainer_form_v2", JSON.stringify(data));
+                const hint = document.getElementById("autoSaveHint");
+                hint.style.opacity = "1";
+                setTimeout(() => { hint.style.opacity = "0.5"; }, 1500);
+            } catch (e) {}
+        }
+
+        function setupLevelCards() {
+            document.querySelectorAll(".level-card").forEach(card => {
+                card.addEventListener("click", function () {
+                    document.querySelectorAll(".level-card").forEach(c => c.classList.remove("selected"));
+                    this.classList.add("selected");
+                    selectedLevel = this.dataset.level;
+                    selectedCondition = -1;
+                    document.querySelectorAll(".qual-radio-item").forEach(i => i.classList.remove("selected"));
+                    const certArea = document.getElementById("certInfoArea");
+                    const majorArea = document.getElementById("majorFieldArea");
+                    certArea.classList.remove("visible");
+                    majorArea.classList.remove("visible");
+                    saveData();
+                    showQualConditions();
+                });
+            });
+        }
+
+        function showQualConditions() {
+            if (!selectedLevel) return;
+            const qualSection = document.getElementById("qualSection");
+            const qualBox = document.getElementById("qualBox");
+            const qualRadioGroup = document.getElementById("qualRadioGroup");
+            const certArea = document.getElementById("certInfoArea");
+            const majorArea = document.getElementById("majorFieldArea");
+            
+            qualSection.style.display = "block";
+            qualBox.style.display = "none";
+            qualRadioGroup.style.display = "flex";
+            
+            const data = LEVEL_DATA[selectedLevel];
+            if (!data) return;
+            
+            qualRadioGroup.innerHTML = "";
+            data.conditions.forEach((cond, idx) => {
+                if (idx === 0) return;
+                const item = document.createElement("div");
+                item.className = "qual-radio-item";
+                item.innerHTML = '<div class="radio-dot"></div><div class="radio-text">' + cond + '</div>';
+                item.addEventListener("click", () => {
+                    document.querySelectorAll(".qual-radio-item").forEach(i => i.classList.remove("selected"));
+                    item.classList.add("selected");
+                    selectedCondition = idx;
+                    updateConditionAreas(data, idx);
+                    saveData();
+                });
+                qualRadioGroup.appendChild(item);
+            });
+            
+            certArea.classList.remove("visible");
+            majorArea.classList.remove("visible");
+            
+            setTimeout(() => {
+                qualSection.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 100);
+        }
+
+        function setupFormValidation() {
+            document.querySelectorAll(".form-input").forEach(input => {
+                input.addEventListener("blur", () => validateField(input));
+                input.addEventListener("input", () => {
+                    if (input.classList.contains("error")) validateField(input);
+                    saveData();
+                });
+            });
+        }
+
+        function validateField(input) {
+            const id = input.id;
+            let valid = true;
+            if (id === "userName") {
+                valid = input.value.trim().length > 0;
+                toggleError("userNameError", !valid);
+            }
+            input.classList.toggle("error", !valid);
+            return valid;
+        }
+
+        function toggleError(errorId, show) {
+            const el = document.getElementById(errorId);
+            el.style.display = show ? "block" : "none";
+        }
+
+        function updateStepper() {
+            const items = document.querySelectorAll(".step-item");
+            const connectors = document.querySelectorAll(".step-connector");
+            items.forEach((item, i) => {
+                const stepNum = i + 1;
+                item.classList.remove("active", "completed");
+                if (stepNum < currentStep) {
+                    item.classList.add("completed");
+                } else if (stepNum === currentStep) {
+                    item.classList.add("active");
+                }
+            });
+            connectors.forEach((conn, i) => {
+                conn.classList.toggle("active", i + 1 < currentStep);
+            });
+        }
+
+        function showStep(step) {
+            document.querySelectorAll(".step-panel").forEach(p => p.classList.remove("active"));
+            if (step === 4) {
+                document.getElementById("formActions").style.display = "none";
+                document.querySelector(".stepper").style.display = "none";
+                document.getElementById("step4").classList.add("active");
+                return;
+            }
+            document.getElementById("step" + step).classList.add("active");
+            document.getElementById("formActions").style.display = "flex";
+            document.querySelector(".stepper").style.display = "flex";
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+            prevBtn.style.visibility = step > 1 ? "visible" : "hidden";
+            if (step === 3) {
+                nextBtn.innerHTML = '确认提交 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+                nextBtn.className = "btn btn-success";
+                populateReview();
+            } else {
+                nextBtn.innerHTML = '下一步 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>';
+                nextBtn.className = "btn btn-primary";
+            }
+        }
+
+        function renderQualConditions() {
+            const data = LEVEL_DATA[selectedLevel];
+            if (!data) return;
+            document.getElementById("qualBoxTitleText").textContent = data.fullName + " 报考资格要求";
+            const listEl = document.getElementById("qualList");
+            listEl.innerHTML = "";
+            data.conditions.forEach((cond, idx) => {
+                const li = document.createElement("li");
+                li.textContent = cond;
+                listEl.appendChild(li);
+            });
+            const radioGroup = document.getElementById("qualRadioGroup");
+            radioGroup.innerHTML = "";
+            data.conditions.forEach((cond, idx) => {
+                if (idx === 0) return;
+                const item = document.createElement("div");
+                item.className = "radio-item";
+                item.innerHTML = '<input type="radio" name="qualCondition" id="qual' + idx + '" value="' + idx + '" ' + (selectedCondition === idx ? 'checked' : '') + '><label for="qual' + idx + '">' + cond + '</label>';
+                item.querySelector("input").addEventListener("change", () => {
+                    selectedCondition = idx;
+                    updateConditionAreas(data, idx);
+                    saveData();
+                });
+                radioGroup.appendChild(item);
+            });
+            updateConditionAreas(data, selectedCondition);
+        }
+
+        function updateConditionAreas(data, condIdx) {
+            const certArea = document.getElementById("certInfoArea");
+            const majorArea = document.getElementById("majorFieldArea");
+            if (condIdx >= 0 && data.needsCert[condIdx]) {
+                certArea.classList.add("visible");
+            } else {
+                certArea.classList.remove("visible");
+            }
+            if (condIdx >= 0 && data.needsMajor[condIdx]) {
+                majorArea.classList.add("visible");
+            } else {
+                majorArea.classList.remove("visible");
+            }
+        }
+
+        function validateStep(step) {
+            if (step === 1) {
+                const userName = document.getElementById("userName");
+                if (!userName.value.trim()) {
+                    userName.classList.add("error");
+                    toggleError("userNameError", true);
+                    showToast("请输入姓名", "warning");
+                    return false;
+                }
+                return true;
+            }
+            if (step === 2) {
+                if (!selectedLevel) {
+                    showToast("请选择报考等级", "warning");
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+
+        function toggleWechatPopup(event) {
+            event.stopPropagation();
+            const popup = document.getElementById("wechatQrPopup");
+            const mapPopup = document.getElementById("mapPopup");
+            if (mapPopup) mapPopup.classList.remove("visible");
+            popup.classList.toggle("visible");
+        }
+
+        function handleWechatClick(event) {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            if (isMobile) {
+                window.location.href = "weixin://";
+                setTimeout(function() {
+                    showToast("请在微信中搜索或扫码添加好友", "info");
+                }, 100);
+            }
+        }
+
+        function toggleMapPopup(event) {
+            if (event) event.stopPropagation();
+        }
+
+        function openNavigation(type) {
+            const address = encodeURIComponent("增城敏捷广场三楼328、329号麦包AI");
+            let url = "";
+            if (type === "amap") {
+                url = "https://uri.amap.com/search?keyword=" + address + "&src=m&lng=113.81&lat=23.29&callnative=1";
+            } else if (type === "baidu") {
+                url = "https://api.map.baidu.com/geocoder?address=" + address + "&output=html&src=webapp.baidu.openAPIdemo";
+            }
+            if (url) window.open(url, "_blank");
+            document.getElementById("mapPopup").classList.remove("visible");
+        }
+
+        function copyAddress() {
+            const address = "增城敏捷广场三楼328、329号麦包AI";
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(address).then(() => {
+                    showToast("地址已复制到剪贴板", "success");
+                }).catch(() => {
+                    fallbackCopy(address);
+                });
+            } else {
+                fallbackCopy(address);
+            }
+            document.getElementById("mapPopup").classList.remove("visible");
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            textarea.style.position = "fixed";
+            textarea.style.opacity = "0";
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand("copy");
+                showToast("地址已复制到剪贴板", "success");
+            } catch (err) {
+                showToast("复制失败，请手动复制", "error");
+            }
+            document.body.removeChild(textarea);
+        }
+
+        document.addEventListener("click", function(e) {
+            const wechatPopup = document.getElementById("wechatQrPopup");
+            const mapPopup = document.getElementById("mapPopup");
+            const wechatRow = document.getElementById("wechatRow");
+            const mapRow = document.getElementById("mapRow");
+
+            if (wechatPopup && !wechatRow.contains(e.target)) {
+                wechatPopup.classList.remove("visible");
+            }
+            if (mapPopup && !mapRow.contains(e.target)) {
+                mapPopup.classList.remove("visible");
+            }
+        });
+
+        function nextStep() {
+            if (!validateStep(currentStep)) return;
+            if (currentStep === 3) {
+                submitForm();
+                return;
+            }
+            if (currentStep === 2 && selectedCondition < 0) {
+                showToast("请选择您符合的报考条件", "warning");
+                return;
+            }
+            const currentPanel = document.getElementById("step" + currentStep);
+            const panelTop = currentPanel.offsetTop;
+            currentStep++;
+            updateStepper();
+            showStep(currentStep);
+            const nextPanel = document.getElementById("step" + currentStep);
+            if (nextPanel) {
+                nextPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        }
+
+        function updateReviewQualContent() {
+            const data = LEVEL_DATA[selectedLevel];
+            if (!data || selectedCondition < 0) {
+                document.getElementById("reviewQualContent").textContent = "-";
+                return;
+            }
+            const condition = data.conditions[selectedCondition];
+            document.getElementById("reviewQualContent").textContent = condition;
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepper();
+                showStep(currentStep);
+                const panel = document.getElementById("step" + currentStep);
+                if (panel) {
+                    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            }
+        }
+
+        function populateReview() {
+            document.getElementById("reviewName").textContent = document.getElementById("userName").value || "-";
+            document.getElementById("reviewCompany").textContent = document.getElementById("company").value || "-";
+            
+            const levelData = LEVEL_DATA[selectedLevel];
+            document.getElementById("reviewLevel").textContent = levelData ? levelData.fullName : "-";
+            
+            let conditionText = "-";
+            if (selectedCondition >= 0 && levelData) {
+                conditionText = levelData.conditions[selectedCondition];
+            }
+            document.getElementById("reviewQual").textContent = conditionText;
+            
+            const certName = document.getElementById("certName").value || "";
+            const certNumber = document.getElementById("certNumber").value || "";
+            const certRow = document.getElementById("reviewCertRow");
+            const certValue = document.getElementById("reviewCert");
+            
+            if (certName || certNumber) {
+                certValue.textContent = certName + (certNumber ? " (" + certNumber + ")" : "");
+                certRow.style.display = "flex";
+            } else {
+                certRow.style.display = "none";
+            }
+            
+            const majorName = document.getElementById("majorName").value || "";
+            const majorRow = document.getElementById("reviewMajorRow");
+            const majorValue = document.getElementById("reviewMajor");
+            
+            if (majorName) {
+                majorValue.textContent = majorName;
+                majorRow.style.display = "flex";
+            } else {
+                majorRow.style.display = "none";
+            }
+        }
+
+        async function submitForm() {
+            const levelData = LEVEL_DATA[selectedLevel];
+            const submission = {
+                userName: document.getElementById("userName").value,
+                company: document.getElementById("company").value,
+                level: levelData ? levelData.fullName : "",
+                condition: selectedCondition >= 0 && levelData ? levelData.conditions[selectedCondition] : "",
+                certName: document.getElementById("certName").value || "",
+                certNumber: document.getElementById("certNumber").value || "",
+                majorName: document.getElementById("majorName").value || "",
+                submitTime: new Date().toLocaleString("zh-CN")
+            };
+            
+            const nextBtn = document.getElementById("nextBtn");
+            const originalText = nextBtn.innerHTML;
+            nextBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg> 提交中...';
+            nextBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userName: submission.userName,
+                        company: submission.company,
+                        level: submission.level,
+                        condition: submission.condition,
+                        certName: submission.certName,
+                        certNumber: submission.certNumber,
+                        majorName: submission.majorName
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    submissions.push(submission);
+                    saveData();
+                    
+                    document.getElementById("successLevel").textContent = submission.level;
+                    document.getElementById("successTime").textContent = submission.submitTime;
+                    
+                    currentStep = 4;
+                    updateStepper();
+                    showStep(4);
+                    showToast("报名信息提交成功！", "success");
+                } else {
+                    showToast("提交失败，请重试", "error");
+                }
+            } catch (error) {
+                console.error('Submit error:', error);
+                submissions.push(submission);
+                saveData();
+                
+                document.getElementById("successLevel").textContent = submission.level;
+                document.getElementById("successTime").textContent = submission.submitTime;
+                
+                currentStep = 4;
+                updateStepper();
+                showStep(4);
+                showToast("报名信息已保存（离线模式）", "warning");
+            } finally {
+                nextBtn.innerHTML = originalText;
+                nextBtn.disabled = false;
+            }
+        }
+
+        function resetForm() {
+            document.getElementById("userName").value = "";
+            document.getElementById("company").value = "";
+            document.getElementById("certName").value = "";
+            document.getElementById("certNumber").value = "";
+            document.getElementById("majorName").value = "";
+            document.querySelectorAll(".level-card").forEach(c => c.classList.remove("selected"));
+            document.querySelectorAll(".qual-radio-item").forEach(i => i.classList.remove("selected"));
+            selectedLevel = null;
+            selectedCondition = -1;
+            currentStep = 1;
+            document.getElementById("qualSection").style.display = "none";
+            document.getElementById("certInfoArea").classList.remove("visible");
+            document.getElementById("majorFieldArea").classList.remove("visible");
+            updateStepper();
+            showStep(1);
+            localStorage.removeItem("ai_trainer_form_v2");
+            submissions = [];
+        }
+
+        function viewSubmissions() {
+            if (submissions.length === 0) {
+                showToast("暂无申请记录", "info");
+                return;
+            }
+            let html = "<div style='max-height:400px;overflow-y:auto;padding:16px;'>";
+            html += "<h3 style='margin-bottom:16px;color:var(--gray-800);font-size:16px;font-weight:600;'>我的申请记录</h3>";
+            html += "<div style='display:flex;flex-direction:column;gap:12px;'>";
+            submissions.forEach((sub, idx) => {
+                html += "<div style='background:var(--gray-50);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);'>";
+                html += "<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'>";
+                html += "<span style='font-weight:600;color:var(--primary);'>" + (idx + 1) + ". " + sub.level + "</span>";
+                html += "<span style='font-size:12px;color:var(--warning);padding:4px 10px;background:var(--warning-light);border-radius:12px;'>待审核</span>";
+                html += "</div>";
+                html += "<div style='font-size:13px;color:var(--gray-600);margin-bottom:4px;'>姓名：" + sub.userName + "</div>";
+                html += "<div style='font-size:13px;color:var(--gray-500);'>提交时间：" + sub.submitTime + "</div>";
+                html += "</div>";
+            });
+            html += "</div></div>";
+            
+            const modal = document.createElement("div");
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.5); z-index: 10000;
+                display: flex; align-items: center; justify-content: center;
+                padding: 20px;
+            `;
+            const content = document.createElement("div");
+            content.style.cssText = `
+                background: #fff; border-radius: var(--radius);
+                max-width: 500px; width: 100%; max-height: 80vh;
+                box-shadow: var(--shadow-xl);
+            `;
+            content.innerHTML = html;
+            const closeBtn = document.createElement("button");
+            closeBtn.textContent = "关闭";
+            closeBtn.style.cssText = `
+                width: 100%; padding: 14px; border: none;
+                background: var(--gray-100); color: var(--gray-700);
+                font-weight: 600; border-radius: 0 0 var(--radius) var(--radius);
+                cursor: pointer; transition: background var(--transition-fast);
+            `;
+            closeBtn.onmouseenter = () => closeBtn.style.background = "var(--gray-200)";
+            closeBtn.onclick = () => document.body.removeChild(modal);
+            content.appendChild(closeBtn);
+            modal.appendChild(content);
+            modal.onclick = (e) => { if (e.target === modal) document.body.removeChild(modal); };
+            document.body.appendChild(modal);
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.className = "toast toast-" + type + " show";
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+
+        function exportExcel() {
+            if (!isAdminLoggedIn) {
+                showToast("请先登录管理员", "warning");
+                return;
+            }
+            if (!submissions || submissions.length === 0) {
+                showToast("没有可导出的报名数据", "warning");
+                return;
+            }
+            
+            try {
+                const worksheetData = [
+                    ["姓名", "工作单位", "报考等级", "符合条件", "证书/职称名称", "证书/职称编号", "专业或相关专业名称", "提交时间"]
+                ];
+                
+                submissions.forEach(s => {
+                    worksheetData.push([
+                        s.userName || "",
+                        s.company || "",
+                        s.level || "",
+                        s.condition || "",
+                        s.certName || "",
+                        s.certNumber || "",
+                        s.majorName || "",
+                        s.submitTime || ""
+                    ]);
+                });
+                
+                const ws = XLSX.utils.aoa_to_sheet(worksheetData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "报名数据");
+                
+                const dateStr = new Date().toISOString().slice(0, 10);
+                XLSX.writeFile(wb, "人工智能训练师报名数据_" + dateStr + ".xlsx");
+                showToast("导出成功", "success");
+            } catch (e) {
+                console.error(e);
+                showToast("导出失败", "error");
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "ai-trainer-registration",
+  "version": "1.0.0",
+  "description": "人工智能训练师报名初审系统",
+  "private": true,
+  "scripts": {
+    "dev": "node -r dotenv/config api/server.js",
+    "build": "echo 'Static site, no build required'",
+    "start": "node -r dotenv/config api/server.js",
+    "init-db": "node -r dotenv/config api/init-db.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "pg": "^8.11.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}

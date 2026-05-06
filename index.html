@@ -1065,10 +1065,6 @@
                             <div class="qual-radio-group" id="qualRadioGroup"></div>
 
                             <div class="cert-info-area" id="certInfoArea">
-                                <div class="form-group" style="margin-bottom:0">
-                                    <label class="form-label" id="certNameLabel">证书/职称名称</label>
-                                    <input type="text" class="form-input" id="certName" placeholder="请输入名称">
-                                </div>
                             </div>
 
                             <div class="major-field-area" id="majorFieldArea">
@@ -1247,9 +1243,11 @@
                     "（2）取得本职业或相关职业五级/初级工职业资格（职业技能等级）证书后，累计从事本职业或相关职业工作满3年。",
                     "（3）取得本专业或相关专业的技工院校或中等及以上职业院校、专科及以上普通高等学校毕业证书（含在读应届毕业生）。"
                 ],
-                needsCert: [false, true, false],
-                certType: ['', '职业技能等级证书', ''],
-                needsMajor: [false, false, true]
+                fields: [
+                    [],
+                    [{ type: 'cert', label: '职业技能等级证书名称' }],
+                    [{ type: 'major', label: '专业或相关专业名称' }]
+                ]
             },
             "3": {
                 name: "三级/高级工",
@@ -1263,9 +1261,14 @@
                     "（5）取得本职业或相关职业四级/中级工职业资格（职业技能等级）证书，并取得高等职业学校、专科及以上普通高等学校本专业或相关专业毕业证书（含在读应届毕业生）。",
                     "（6）取得经评估论证的高等职业学校、专科及以上普通高等学校本专业或相关专业的毕业证书（含在读应届毕业生）。"
                 ],
-                needsCert: [false, true, true, false, true, false],
-                certType: ['', '职业技能等级证书', '职称', '', '职业技能等级证书', ''],
-                needsMajor: [false, false, false, true, true, true]
+                fields: [
+                    [],
+                    [{ type: 'cert', label: '职业技能等级证书名称' }],
+                    [{ type: 'cert', label: '职称名称' }],
+                    [{ type: 'major', label: '专业或相关专业名称' }],
+                    [{ type: 'cert', label: '职业技能等级证书名称' }, { type: 'major', label: '专业或相关专业名称' }],
+                    [{ type: 'major', label: '专业或相关专业名称' }]
+                ]
             },
             "2": {
                 name: "二级/技师",
@@ -1278,9 +1281,13 @@
                     "（4）取得本职业或相关职业三级/高级工职业资格（职业技能等级）证书的高级技工学校、技师学院毕业生，累计从事本职业或相关职业工作满2年。",
                     "（5）取得本职业或相关职业三级/高级工职业资格（职业技能等级）证书满2年的技师学院预备技师班、技师班学生。"
                 ],
-                needsCert: [true, true, true, true, true],
-                certType: ['职业技能等级证书', '职称', '职称', '职业技能等级证书', '职业技能等级证书'],
-                needsMajor: [false, false, false, false, false]
+                fields: [
+                    [{ type: 'cert', label: '职业技能等级证书名称' }],
+                    [{ type: 'cert', label: '职称名称' }, { type: 'cert', label: '职业技能等级证书名称' }],
+                    [{ type: 'cert', label: '职称名称' }],
+                    [{ type: 'cert', label: '职业技能等级证书名称' }],
+                    [{ type: 'cert', label: '职业技能等级证书名称' }]
+                ]
             },
             "1": {
                 name: "一级/高级技师",
@@ -1291,9 +1298,11 @@
                     "（2）取得符合专业对应关系的中级职称后，累计从事本职业或相关职业工作满5年，并在取得本职业或相关职业二级/技师职业资格（职业技能等级）证书后，从事本职业或相关职业工作满1年。",
                     "（3）取得符合专业对应关系的高级职称（专业技术人员职业资格）后，累计从事本职业或相关职业工作满1年。"
                 ],
-                needsCert: [true, true, true],
-                certType: ['职业技能等级证书', '职称', '职称'],
-                needsMajor: [false, false, false]
+                fields: [
+                    [{ type: 'cert', label: '职业技能等级证书名称' }],
+                    [{ type: 'cert', label: '职称名称' }, { type: 'cert', label: '职业技能等级证书名称' }],
+                    [{ type: 'cert', label: '职称名称' }]
+                ]
             }
         };
 
@@ -1561,23 +1570,35 @@
 
         function updateConditionAreas(data, condIdx) {
             const certArea = document.getElementById("certInfoArea");
-            const certNameLabel = document.getElementById("certNameLabel");
             const majorArea = document.getElementById("majorFieldArea");
             
-            if (condIdx >= 0 && data.needsCert[condIdx]) {
-                certArea.classList.add("visible");
-                const certType = data.certType && data.certType[condIdx] ? data.certType[condIdx] : '证书/职称';
-                certNameLabel.textContent = certType + '名称';
-            } else {
-                certArea.classList.remove("visible");
-                certNameLabel.textContent = "证书/职称名称";
-            }
+            certArea.innerHTML = "";
+            certArea.classList.remove("visible");
+            majorArea.classList.remove("visible");
             
-            if (condIdx >= 0 && data.needsMajor[condIdx]) {
-                majorArea.classList.add("visible");
-            } else {
-                majorArea.classList.remove("visible");
-            }
+            if (condIdx < 0 || !data.fields || !data.fields[condIdx]) return;
+            
+            const fields = data.fields[condIdx];
+            if (fields.length === 0) return;
+            
+            let hasCert = false;
+            let hasMajor = false;
+            
+            fields.forEach((field, idx) => {
+                if (field.type === 'cert') {
+                    hasCert = true;
+                    const group = document.createElement("div");
+                    group.className = "form-group";
+                    if (idx === fields.length - 1) group.style.marginBottom = "0";
+                    group.innerHTML = '<label class="form-label">' + field.label + '</label><input type="text" class="form-input cert-input" data-field="cert" placeholder="请输入' + field.label + '">';
+                    certArea.appendChild(group);
+                } else if (field.type === 'major') {
+                    hasMajor = true;
+                }
+            });
+            
+            if (hasCert) certArea.classList.add("visible");
+            if (hasMajor) majorArea.classList.add("visible");
         }
 
         function validateStep(step) {
@@ -1722,6 +1743,18 @@
             }
         }
 
+        function getCertValues() {
+            const certInputs = document.querySelectorAll('.cert-input');
+            const values = [];
+            certInputs.forEach(input => {
+                if (input.value.trim()) {
+                    const label = input.parentElement.querySelector('.form-label').textContent;
+                    values.push(label + '：' + input.value.trim());
+                }
+            });
+            return values.join('；');
+        }
+
         function populateReview() {
             document.getElementById("reviewName").textContent = document.getElementById("userName").value || "-";
             document.getElementById("reviewCompany").textContent = document.getElementById("company").value || "-";
@@ -1735,12 +1768,12 @@
             }
             document.getElementById("reviewQual").textContent = conditionText;
             
-            const certName = document.getElementById("certName").value || "";
+            const certText = getCertValues();
             const certRow = document.getElementById("reviewCertRow");
             const certValue = document.getElementById("reviewCert");
             
-            if (certName) {
-                certValue.textContent = certName;
+            if (certText) {
+                certValue.textContent = certText;
                 certRow.style.display = "flex";
             } else {
                 certRow.style.display = "none";
@@ -1760,13 +1793,15 @@
 
         async function submitForm() {
             const levelData = LEVEL_DATA[selectedLevel];
+            const certText = getCertValues();
+            const majorName = document.getElementById("majorName").value || "";
             const submission = {
                 userName: document.getElementById("userName").value,
                 company: document.getElementById("company").value,
                 level: levelData ? levelData.fullName : "",
                 condition: selectedCondition >= 0 && levelData ? levelData.conditions[selectedCondition] : "",
-                certName: document.getElementById("certName").value || "",
-                majorName: document.getElementById("majorName").value || "",
+                certName: certText,
+                majorName: majorName,
                 submitTime: new Date().toLocaleString("zh-CN")
             };
             
@@ -1828,7 +1863,7 @@
         function resetForm() {
             document.getElementById("userName").value = "";
             document.getElementById("company").value = "";
-            document.getElementById("certName").value = "";
+            document.getElementById("certInfoArea").innerHTML = "";
             document.getElementById("majorName").value = "";
             document.querySelectorAll(".level-card").forEach(c => c.classList.remove("selected"));
             document.querySelectorAll(".qual-radio-item").forEach(i => i.classList.remove("selected"));

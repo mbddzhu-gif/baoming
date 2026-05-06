@@ -16,6 +16,14 @@
     {
       "src": "index.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "logo.png",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "wechat-qr.jpg",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -30,6 +38,14 @@
     {
       "src": "/api/export",
       "dest": "/api/export.js"
+    },
+    {
+      "src": "/logo.png",
+      "dest": "/logo.png"
+    },
+    {
+      "src": "/wechat-qr.jpg",
+      "dest": "/wechat-qr.jpg"
     },
     {
       "src": "/(.*)",

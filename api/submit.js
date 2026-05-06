@@ -3,21 +3,50 @@ const { Pool } = require('pg');
 
 let pool = null;
 
-try {
-    pool = new Pool({
-        connectionString: process.env.POSTGRES_URL,
-        ssl: {
-            rejectUnauthorized: false
-        },
-        connectionTimeoutMillis: 10000
-    });
-    
-    pool.on('error', (err) => {
-        console.error('PostgreSQL connection error:', err);
-    });
-} catch (error) {
-    console.error('Failed to create pool:', error);
+const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS submissions (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(100) NOT NULL,
+        company VARCHAR(200),
+        level VARCHAR(100),
+        condition TEXT,
+        cert_name VARCHAR(200),
+        cert_number VARCHAR(100),
+        major_name VARCHAR(200),
+        submit_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`;
+
+async function initPool() {
+    try {
+        if (!process.env.POSTGRES_URL) {
+            console.error('POSTGRES_URL environment variable is not set');
+            return null;
+        }
+        
+        pool = new Pool({
+            connectionString: process.env.POSTGRES_URL,
+            ssl: {
+                rejectUnauthorized: false
+            },
+            connectionTimeoutMillis: 10000
+        });
+        
+        pool.on('error', (err) => {
+            console.error('PostgreSQL connection error:', err);
+        });
+        
+        await pool.query(createTableQuery);
+        console.log('Table checked/created successfully');
+        
+        return pool;
+    } catch (error) {
+        console.error('Failed to initialize pool:', error.message || error);
+        return null;
+    }
 }
+
+let initialized = false;
 
 module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -29,7 +58,12 @@ module.exports = async (req, res) => {
     }
 
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
+        return res.status(405).json({ success: false, error: 'Method not allowed' });
+    }
+
+    if (!initialized) {
+        await initPool();
+        initialized = true;
     }
 
     if (!pool) {

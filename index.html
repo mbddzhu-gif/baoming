@@ -1293,6 +1293,7 @@
                     "（3）取得符合专业对应关系的高级职称（专业技术人员职业资格）后，累计从事本职业或相关职业工作满1年。"
                 ],
                 needsCert: [true, true, true],
+                needsCertNumber: [false, false, false],
                 needsMajor: [false, false, false]
             }
         };
@@ -1561,12 +1562,22 @@
 
         function updateConditionAreas(data, condIdx) {
             const certArea = document.getElementById("certInfoArea");
+            const certNumberField = document.getElementById("certNumber").parentElement.parentElement;
             const majorArea = document.getElementById("majorFieldArea");
+            
             if (condIdx >= 0 && data.needsCert[condIdx]) {
                 certArea.classList.add("visible");
+                
+                if (data.needsCertNumber && data.needsCertNumber[condIdx] === false) {
+                    certNumberField.style.display = "none";
+                } else {
+                    certNumberField.style.display = "";
+                }
             } else {
                 certArea.classList.remove("visible");
+                certNumberField.style.display = "";
             }
+            
             if (condIdx >= 0 && data.needsMajor[condIdx]) {
                 majorArea.classList.add("visible");
             } else {

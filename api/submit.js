@@ -11,7 +11,6 @@ const createTableQuery = `
         level VARCHAR(100),
         condition TEXT,
         cert_name VARCHAR(200),
-        cert_number VARCHAR(100),
         major_name VARCHAR(200),
         submit_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
@@ -72,7 +71,7 @@ module.exports = async (req, res) => {
     }
 
     try {
-        const { userName, company, level, condition, certName, certNumber, majorName } = req.body;
+        const { userName, company, level, condition, certName, majorName } = req.body;
         
         console.log('Received submission:', { userName, company, level });
         
@@ -81,8 +80,8 @@ module.exports = async (req, res) => {
         }
 
         const result = await pool.query(
-            'INSERT INTO submissions (username, company, level, condition, cert_name, cert_number, major_name) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
-            [userName, company, level, condition, certName, certNumber, majorName]
+            'INSERT INTO submissions (username, company, level, condition, cert_name, major_name) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+            [userName, company, level, condition, certName, majorName]
         );
 
         console.log('Submission saved successfully, id:', result.rows[0].id);

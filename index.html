@@ -1065,13 +1065,9 @@
                             <div class="qual-radio-group" id="qualRadioGroup"></div>
 
                             <div class="cert-info-area" id="certInfoArea">
-                                <div class="form-group">
-                                    <label class="form-label">证书/职称名称</label>
-                                    <input type="text" class="form-input" id="certName" placeholder="请输入证书或职称名称">
-                                </div>
                                 <div class="form-group" style="margin-bottom:0">
-                                    <label class="form-label">证书/职称编号</label>
-                                    <input type="text" class="form-input" id="certNumber" placeholder="请输入证书或职称编号（如有）">
+                                    <label class="form-label" id="certNameLabel">证书/职称名称</label>
+                                    <input type="text" class="form-input" id="certName" placeholder="请输入名称">
                                 </div>
                             </div>
 
@@ -1565,21 +1561,16 @@
 
         function updateConditionAreas(data, condIdx) {
             const certArea = document.getElementById("certInfoArea");
-            const certNameLabel = document.querySelector('#certInfoArea .form-label');
-            const certNumberField = document.getElementById("certNumber").parentElement.parentElement;
+            const certNameLabel = document.getElementById("certNameLabel");
             const majorArea = document.getElementById("majorFieldArea");
             
             if (condIdx >= 0 && data.needsCert[condIdx]) {
                 certArea.classList.add("visible");
-                
-                const certType = data.certType && data.certType[condIdx] ? data.certType[condIdx] : '证书/职称名称';
+                const certType = data.certType && data.certType[condIdx] ? data.certType[condIdx] : '证书/职称';
                 certNameLabel.textContent = certType + '名称';
-                
-                certNumberField.style.display = "none";
             } else {
                 certArea.classList.remove("visible");
                 certNameLabel.textContent = "证书/职称名称";
-                certNumberField.style.display = "none";
             }
             
             if (condIdx >= 0 && data.needsMajor[condIdx]) {
@@ -1745,12 +1736,11 @@
             document.getElementById("reviewQual").textContent = conditionText;
             
             const certName = document.getElementById("certName").value || "";
-            const certNumber = document.getElementById("certNumber").value || "";
             const certRow = document.getElementById("reviewCertRow");
             const certValue = document.getElementById("reviewCert");
             
-            if (certName || certNumber) {
-                certValue.textContent = certName + (certNumber ? " (" + certNumber + ")" : "");
+            if (certName) {
+                certValue.textContent = certName;
                 certRow.style.display = "flex";
             } else {
                 certRow.style.display = "none";
@@ -1776,7 +1766,6 @@
                 level: levelData ? levelData.fullName : "",
                 condition: selectedCondition >= 0 && levelData ? levelData.conditions[selectedCondition] : "",
                 certName: document.getElementById("certName").value || "",
-                certNumber: document.getElementById("certNumber").value || "",
                 majorName: document.getElementById("majorName").value || "",
                 submitTime: new Date().toLocaleString("zh-CN")
             };
@@ -1798,7 +1787,6 @@
                         level: submission.level,
                         condition: submission.condition,
                         certName: submission.certName,
-                        certNumber: submission.certNumber,
                         majorName: submission.majorName
                     })
                 });
@@ -1841,7 +1829,6 @@
             document.getElementById("userName").value = "";
             document.getElementById("company").value = "";
             document.getElementById("certName").value = "";
-            document.getElementById("certNumber").value = "";
             document.getElementById("majorName").value = "";
             document.querySelectorAll(".level-card").forEach(c => c.classList.remove("selected"));
             document.querySelectorAll(".qual-radio-item").forEach(i => i.classList.remove("selected"));
@@ -1928,7 +1915,7 @@
             
             try {
                 const worksheetData = [
-                    ["姓名", "工作单位", "报考等级", "符合条件", "证书/职称名称", "证书/职称编号", "专业或相关专业名称", "提交时间"]
+                    ["姓名", "工作单位", "报考等级", "符合条件", "证书/职称名称", "专业或相关专业名称", "提交时间"]
                 ];
                 
                 submissions.forEach(s => {
@@ -1938,7 +1925,6 @@
                         s.level || "",
                         s.condition || "",
                         s.certName || "",
-                        s.certNumber || "",
                         s.majorName || "",
                         s.submitTime || ""
                     ]);

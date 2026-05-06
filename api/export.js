@@ -2,12 +2,31 @@ require('dotenv').config();
 const XLSX = require('exceljs');
 const { Pool } = require('pg');
 
-const pool = new Pool({
-    connectionString: process.env.POSTGRES_URL,
-    ssl: {
-        rejectUnauthorized: false
+let pool = null;
+
+async function initPool() {
+    try {
+        if (!process.env.POSTGRES_URL) {
+            console.error('POSTGRES_URL environment variable is not set');
+            return null;
+        }
+        
+        pool = new Pool({
+            connectionString: process.env.POSTGRES_URL,
+            ssl: {
+                rejectUnauthorized: false
+            },
+            connectionTimeoutMillis: 10000
+        });
+        
+        return pool;
+    } catch (error) {
+        console.error('Failed to initialize pool:', error.message || error);
+        return null;
     }
-});
+}
+
+let initialized = false;
 
 module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,6 +39,15 @@ module.exports = async (req, res) => {
 
     if (req.method !== 'GET') {
         return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    if (!initialized) {
+        await initPool();
+        initialized = true;
+    }
+
+    if (!pool) {
+        return res.status(500).json({ error: 'Database connection not available' });
     }
 
     try {
@@ -39,7 +67,6 @@ module.exports = async (req, res) => {
             { header: '报考等级', key: 'level', width: 28 },
             { header: '符合条件', key: 'condition', width: 50 },
             { header: '证书/职称名称', key: 'cert_name', width: 22 },
-            { header: '证书/职称编号', key: 'cert_number', width: 22 },
             { header: '专业或相关专业名称', key: 'major_name', width: 22 },
             { header: '提交时间', key: 'submit_time', width: 22 }
         ];
@@ -59,7 +86,6 @@ module.exports = async (req, res) => {
                 level: s.level || '',
                 condition: s.condition || '',
                 cert_name: s.cert_name || '',
-                cert_number: s.cert_number || '',
                 major_name: s.major_name || '',
                 submit_time: s.submit_time ? s.submit_time.toLocaleString() : ''
             });
@@ -82,7 +108,7 @@ module.exports = async (req, res) => {
         await workbook.xlsx.write(res);
         res.end();
     } catch (error) {
-        console.error('Export error:', error);
+        console.error('Export error:', error.message || error);
         res.status(500).json({ error: 'Failed to generate Excel file' });
     }
 };
